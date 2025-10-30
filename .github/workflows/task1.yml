@@ -37,8 +37,8 @@ jobs:
     steps:
       - name: Default env variables
         run: |
-          echo repository: GITHUB_REPOSITORY \n
-          echo SHA: GITHUB_SHA \n
-          echo workflow: GITHUB_WORKFLOW \n
+          echo repository: $GITHUB_REPOSITORY \n
+          echo SHA: $GITHUB_SHA \n
+          echo workflow: $GITHUB_WORKFLOW \n
       - name: Secret token
         run: echo ${{ secrets.API_TOKEN }}
