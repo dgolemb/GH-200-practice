@@ -1,1 +1,48 @@
 name: Task 4
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - run: echo "app" > app-${{ github.ref_name }}.zip
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app
+        path: app-${{ github.ref_name }}.zip
+    
+  deploy-staging:
+    runs-on: self-hosted
+    needs: build
+    environment: staging
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app
+      - run: echo "Deploying to staging..."
+      - run: echo https://staging.example.com >> $GITHUB_OUTPUT
+
+  deploy-production:
+    runs-on: self-hosted
+    needs: deploy-staging
+    environment: production
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app
+      # - uses: actions/azure-login@v2
+      #   with:
+      #     API_KEY: ${{secrets.PROD_API_KEY}}     to jest dla picu ale wydaje mi się że powinniśmy użyć tego typu action
+      - run: echo "Deploying to production..."
+      - uses: actions/create-release@v1
+        with:
+          tag_name: ${{github.ref}}
+          release_name: Release ${{github.ref}}
