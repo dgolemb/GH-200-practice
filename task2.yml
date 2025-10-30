@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Tests
-        if: ${{ not(contains(github.event_name)), 'skip-tests' }}
+        if: ${{ not(contains(github.event_name), 'skip-tests') }}
         run: |
           echo "Running tests..."
           echo "TEST_STATUS=passed" >> "$GITHUB_ENV"
