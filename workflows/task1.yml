@@ -1,1 +1,44 @@
+# This is a basic workflow to help you get started with Actions
 
+name: Task 1
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Choose environment"
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+  schedule:
+    -cron: "0 6 * * *"
+
+env:
+  BUILD_NUMBER=1.0.${{ github.run_number }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  setup:
+    runs-on: [self-hosted]
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Runtime data
+        run: echo $GITHUB_REF
+  build:
+    runs-on: [self-hosted]
+    needs: setup
+    steps:
+      - name: Default env variables
+        run: |
+          echo repository: GITHUB_REPOSITORY \n
+          echo SHA: GITHUB_SHA \n
+          echo workflow: GITHUB_WORKFLOW \n
+      - name: Secret token
+        run: echo ${{ secrets.API_TOKEN }}
