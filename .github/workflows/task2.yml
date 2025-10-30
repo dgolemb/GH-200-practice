@@ -24,7 +24,7 @@ jobs:
 
       - name: Tests
         id: test
-        if: ${{ not(contains(github.event.pull_request.title, 'skip-tests')) }}
+        if: ${{ !contains(github.event.pull_request.title, 'skip-tests') }}
         run: |
           echo "Running tests..."
           echo "TEST_STATUS=passed" >> "$GITHUB_ENV"
