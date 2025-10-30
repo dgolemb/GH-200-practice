@@ -4,11 +4,11 @@
 name: Task 2
 
 on:
-  pull-request:
+  pull_request:
     branches: [main]
     types: [opened, synchronize]
   workflow_dispatch:
-
+  
 jobs:
   main:
     runs-on: [self-hosted, linux]
