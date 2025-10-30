@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
         
 jobs:
-  container-job:
-    runs-on: ubuntu-latest
+  main:
+    runs-on: self-hosted
     container: node:20-bookworm-slim
 
     services:
@@ -21,30 +21,32 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    steps:
-      - name: Postgres
-        run: echo "Postgres setup"
 
-  main:
-    runs-on: self-hosted
-    needs: container-job
     strategy:
       matrix:
         node-version: [16, 18, 20]
+        
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup Node.js
-      env:
-        node-version: ${{ matrix.node-version }}
-      run: |
-        echo "npm install"
+      uses: actions/setup-node@v4
+      with: ${{matrix.node-version}}
 
     - name: Migration
       run: |
         echo "Running migrations"
 
     - name: Tests
-      run: echo "Running tests with Node ${{ matrix.node-version }}"
+      run: |
+        echo "Running tests with Node ${{ matrix.node-version }}"
+        echo "Test result" > ~/test-results-node-${{ matrix.node-version }}.txt
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Artifact_node_v_${{ matrix.node-version }}
+        path: ~/test-results-node-${{ matrix.node-version }}.txt
+      
 
