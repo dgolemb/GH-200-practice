@@ -8,7 +8,7 @@ on:
     branches: [main]
     types: [opened, synchronize]
   workflow_dispatch:
-  
+
 jobs:
   main:
     runs-on: [self-hosted, linux]
@@ -23,12 +23,12 @@ jobs:
           echo "Running tests..."
           echo "TEST_STATUS=passed" >> "$GITHUB_ENV"
        
-      - name: Linter
-        run: |
-          echo "Running linter..."
-        if: {{ steps.Tests.outcome == skipped}}
-        run: |
-          echo "TEST_STATUS=skipped" >> "$GITHUB_ENV" 
+      # - name: Linter
+      #   run: |
+      #     echo "Running linter..."
+      #   if: {{ steps.Tests.outcome == skipped}}
+      #   run: |
+      #     echo "TEST_STATUS=skipped" >> "$GITHUB_ENV" 
 
       - name: Show test status
         run: echo $TEST_STATUS
