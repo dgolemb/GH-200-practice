@@ -30,15 +30,19 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Runtime data
-        run: echo $GITHUB_REF
+        run: |
+          echo event: $GITHUB_EVENT_NAME
+          echo branch: $GITHUB_REF_NAME
+          echo environment: ${{ inputs.env }}
+
   build:
     runs-on: [self-hosted]
     needs: setup
     steps:
       - name: Default env variables
         run: |
-          echo repository: $GITHUB_REPOSITORY \n
-          echo SHA: $GITHUB_SHA \n
-          echo workflow: $GITHUB_WORKFLOW \n
+          echo repository: $GITHUB_REPOSITORY
+          echo SHA: $GITHUB_SHA
+          echo workflow: $GITHUB_WORKFLOW
       - name: Secret token
         run: echo ${{ secrets.API_TOKEN }}
