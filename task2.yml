@@ -18,17 +18,17 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Tests
-        if: {{ not(contains(github.event_name)), 'skip-tests'}}
+        if: ${{ not(contains(github.event_name)), 'skip-tests' }}
         run: |
           echo "Running tests..."
           echo "TEST_STATUS=passed" >> "$GITHUB_ENV"
        
-      # - name: Linter
-      #   run: |
-      #     echo "Running linter..."
-      #   if: {{ steps.Tests.outcome == skipped}}
-      #   run: |
-      #     echo "TEST_STATUS=skipped" >> "$GITHUB_ENV" 
+      - name: Linter
+        run: |
+          echo "Running linter..."
+        if: ${{ steps.Tests.outcome == skipped }}
+        run: |
+          echo "TEST_STATUS=skipped" >> "$GITHUB_ENV" 
 
       - name: Show test status
         run: echo $TEST_STATUS
