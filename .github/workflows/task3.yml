@@ -8,7 +8,6 @@ on:
 jobs:
   main:
     runs-on: self-hosted
-    container: node:20-bookworm-slim
 
     services:
       postgres:
@@ -25,14 +24,18 @@ jobs:
     strategy:
       matrix:
         node-version: [16, 18, 20]
-        
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
-      with: ${{matrix.node-version}}
+      with: 
+        node-version: ${{matrix.node-version}}
+    
+    - name: Dependencies install
+      run: echo "npm install"
 
     - name: Migration
       run: |
@@ -41,12 +44,12 @@ jobs:
     - name: Tests
       run: |
         echo "Running tests with Node ${{ matrix.node-version }}"
-        echo "Test result" > ~/test-results-node-${{ matrix.node-version }}.txt
+        echo "Test result" > test-results-node-${{ matrix.node-version }}.txt
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Artifact_node_v_${{ matrix.node-version }}
-        path: ~/test-results-node-${{ matrix.node-version }}.txt
+        name: test-results-node-${{ matrix.node-version }}
+        path: test-results-node-${{ matrix.node-version }}.txt
       
 
