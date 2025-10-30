@@ -39,7 +39,7 @@ jobs:
       env:
         node-version: ${{ matrix.node-version }}
       run: |
-        echo "npm install $node-version"
+        echo "npm install ${{env.node-version}}"
 
     - name: Migration
       run: |
