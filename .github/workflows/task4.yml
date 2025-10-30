@@ -27,7 +27,7 @@ jobs:
         with:
           name: app
       - run: echo "Deploying to staging..."
-      - run: echo https://staging.example.com >> $GITHUB_OUTPUT
+      - run: echo "https://staging.example.com" >> $GITHUB_OUTPUT
 
   deploy-production:
     runs-on: self-hosted
